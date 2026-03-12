@@ -23,9 +23,10 @@ import pandas as pd
 from dotenv import load_dotenv
 
 # プロジェクトルートを sys.path に追加
-sys.path.insert(0, str(Path(__file__).parent.parent))
+ROOT = Path(__file__).parent.parent
+sys.path.insert(0, str(ROOT))
 
-load_dotenv()
+load_dotenv(ROOT / ".env")
 
 from src.ai.judge import AIJudge, SimpleJudge
 from src.data.fetcher import calculate_indicators, fetch_historical_data, get_prompt_data
