@@ -1,4 +1,5 @@
 anthropic>=0.40.0
+alpaca-py>=0.40.0
 yfinance>=0.2.40
 pandas>=2.2.0
 numpy>=1.24.0
