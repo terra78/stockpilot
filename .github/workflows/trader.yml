@@ -1,19 +1,11 @@
 name: Stock Trader
 
-# 外部 cron サービスから GitHub API 経由で呼び出す
-# curl コマンド例（market時間中に15分ごと実行）:
-#
-#   curl -X POST \
-#     -H "Authorization: Bearer <GITHUB_TOKEN>" \
-#     -H "Accept: application/vnd.github+json" \
-#     https://api.github.com/repos/terra78/stockpilot/actions/workflows/trader.yml/dispatches \
-#     -d '{"ref":"master"}'
-#
-# ※ GITHUB_TOKEN は Settings > Developer settings > Personal access tokens で発行
-#    必要なスコープ: repo (または workflow)
+# Triggered by external cron service via GitHub API (workflow_dispatch)
+# POST https://api.github.com/repos/terra78/stockpilot/actions/workflows/trader.yml/dispatches
+# Body: {"ref":"master"}
 
 on:
-  workflow_dispatch: # 手動 / 外部 API トリガー専用
+  workflow_dispatch:
 
 jobs:
   trade:
@@ -35,14 +27,12 @@ jobs:
 
       - name: Run trader
         env:
-          # --- Secrets（Settings > Secrets and variables > Actions > Secrets）---
-          ALPACA_API_KEY:    ${{ secrets.ALPACA_API_KEY }}
+          ALPACA_API_KEY: ${{ secrets.ALPACA_API_KEY }}
           ALPACA_SECRET_KEY: ${{ secrets.ALPACA_SECRET_KEY }}
-          ALPACA_BASE_URL:   ${{ secrets.ALPACA_BASE_URL }}
+          ALPACA_BASE_URL: ${{ secrets.ALPACA_BASE_URL }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          # --- Variables（Settings > Secrets and variables > Actions > Variables）---
-          TRADE_SYMBOLS:       ${{ vars.TRADE_SYMBOLS }}
-          MAX_POSITION_RATIO:  ${{ vars.MAX_POSITION_RATIO }}
-          MAX_DAILY_LOSS_USD:  ${{ vars.MAX_DAILY_LOSS_USD }}
-          STOP_LOSS_PERCENT:   ${{ vars.STOP_LOSS_PERCENT }}
+          TRADE_SYMBOLS: ${{ vars.TRADE_SYMBOLS }}
+          MAX_POSITION_RATIO: ${{ vars.MAX_POSITION_RATIO }}
+          MAX_DAILY_LOSS_USD: ${{ vars.MAX_DAILY_LOSS_USD }}
+          STOP_LOSS_PERCENT: ${{ vars.STOP_LOSS_PERCENT }}
         run: python scripts/run_trader.py
