@@ -26,7 +26,7 @@ from dotenv import load_dotenv
 ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(ROOT))
 
-load_dotenv(ROOT / ".env")
+load_dotenv(ROOT / ".env", override=True)
 
 from src.ai.judge import AIJudge, SimpleJudge
 from src.data.fetcher import calculate_indicators, fetch_historical_data, get_prompt_data
