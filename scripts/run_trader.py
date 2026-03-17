@@ -115,12 +115,13 @@ def run() -> None:
             # 注文実行
             if action == "BUY" and confidence >= 0.6:
                 max_qty = risk_manager.max_buy_quantity(
-                    market_data["current_price"], portfolio_value
+                    market_data["current_price"], available_cash
                 )
                 if max_qty == 0 and available_cash >= market_data["current_price"]:
                     max_qty = 1
                 qty = min(decision.get("quantity", 1), max_qty)
-                if qty > 0:
+                cost = qty * market_data["current_price"]
+                if qty > 0 and available_cash >= cost:
                     order = executor.market_buy(symbol, qty, reason)
                     log.info(
                         f"  🟢 BUY {qty}株  "
